@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ToDoListModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ToDoListModelStoreContainer">
+          <EntitySet Name="Tasks" EntityType="ToDoListModel.Store.Tasks" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Tasks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
+        </EntityType>
+        <Function Name="Tasks_Add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="Tasks_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Tasks_GetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Tasks_MarkAsComplete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ToDoListModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ToDoListEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Tasks" EntityType="ToDoListModel.Task" />
+          <FunctionImport Name="GetTasks" EntitySet="Tasks" ReturnType="Collection(ToDoListModel.Task)" />
+          <FunctionImport Name="AddTask">
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteTask">
+            <Parameter Name="ID" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="MarkTaskAsComplete">
+            <Parameter Name="ID" Mode="In" Type="Guid" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" />
+          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ToDoListModelStoreContainer" CdmEntityContainer="ToDoListEntities">
+          <EntitySetMapping Name="Tasks"><EntityTypeMapping TypeName="ToDoListModel.Task"><MappingFragment StoreEntitySet="Tasks">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Created" ColumnName="Created" />
+            <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetTasks" FunctionName="ToDoListModel.Store.Tasks_GetAll" />
+          <FunctionImportMapping FunctionImportName="AddTask" FunctionName="ToDoListModel.Store.Tasks_Add" />
+          <FunctionImportMapping FunctionImportName="DeleteTask" FunctionName="ToDoListModel.Store.Tasks_Delete" />
+          <FunctionImportMapping FunctionImportName="MarkTaskAsComplete" FunctionName="ToDoListModel.Store.Tasks_MarkAsComplete" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ToDoList">
+        <EntityTypeShape EntityType="ToDoListModel.Task" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
