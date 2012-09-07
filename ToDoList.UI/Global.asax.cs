@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Castle.Windsor;
+using Castle.Windsor.Installer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,11 +16,20 @@ namespace ToDoList.UI
         {
             // Code that runs on application startup
 
+            var container = new WindsorContainer();
+            container.Install(FromAssembly.InThisApplication());
+
+            Application.Add("container", container);
+
         }
 
         void Application_End(object sender, EventArgs e)
         {
             //  Code that runs on application shutdown
+
+            var container = Application["container"] as IWindsorContainer;
+
+            container.Dispose();
 
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Castle.Windsor;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ToDoList.UI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Get a concrete ITaskListRepository using a dependancy injection factory.
+            // Get a concrete ITaskListRepository using the Windsor IOC container.
             taskList = GetConcreteTaskListRepository();
 
             if (!IsPostBack)
@@ -53,8 +54,8 @@ namespace ToDoList.UI
         private ITaskListRepository GetConcreteTaskListRepository()
         {
             // This is the factory method that gets the concrete ITaskListRepository.
-            string className = ConfigurationManager.AppSettings["TaskListRepositoryClass"];
-            return (ITaskListRepository)Activator.CreateInstance("ToDoList.Model", className).Unwrap();
+            var container = Application["container"] as IWindsorContainer;
+            return container.Resolve<ITaskListRepository>();
         }
     }
 }
